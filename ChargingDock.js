@@ -10,11 +10,11 @@ function ChargingDock(){
     this.plug = function(dvc){
         //type in here
     };
-  
+
     this.unplug = function(dvcIdx){
         //type in here
     };
-  
+
     this.chargeAll = function(min){
         //type in here
     };

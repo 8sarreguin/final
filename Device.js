@@ -5,7 +5,7 @@ function Device(t,ma,c){
     //Instance Variables
     this.type = t;
     this.state = "off";
-    this.milliAmps = ma;
+    this.millAmps = ma;
     this.capacity = c;
     this.juice = 1;
     this.rate = [0.0015,0.0235,0.23];
@@ -13,7 +13,7 @@ function Device(t,ma,c){
     //Instance Functions
 
     this.power = function(){
-      return this.juice * 100;
+      return this.juice;
     }
     this.on = function(){
         if(this.state == "off" && this.juice >0){
@@ -66,7 +66,24 @@ function Device(t,ma,c){
 
         //resets juice to 1 if it has exceeded 1
         if(this.juice > 1){
-          this.juice = 1;
+          this.juice = 100;
+        }
+    };
+
+    this.use = function(min){
+        if (this.state == "active") {
+            this.juice = (this.juice * 100) - (this.rate[2] * min);
+        }
+
+        else if (this.state == "idle") {
+            this.juice = (this.juice * 100) - (this.rate[1] * min);
+        }
+
+        else if (this.state == "off") {
+            this.juice = (this.juice * 100) - (this.rate[0] * min);
+        }
+        if(this.juice<0){
+            this.juice=0;
         }
     };
 }//end of the device declaration
@@ -75,8 +92,15 @@ function Device(t,ma,c){
 function main(){
   let shitStuffs = new Device("Moar Shit", 1500, 5000);
   shitStuffs.on();
-  shitStuffs.wake();
+  //shitStuffs.wake();
   console.log(shitStuffs.state);
+  shitStuffs.use(600);
+  console.log(shitStuffs.juice);
+  console.log(shitStuffs.power());
+  shitStuffs.off();
+  shitStuffs.charge(120);
+  console.log(shitStuffs.power());
+  console.log(shitStuffs.juice);
 }
 //runs the testing code.
 main();
